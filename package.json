@@ -1,0 +1,40 @@
+{
+  "name": "browser-routes",
+  "version": "0.1.0",
+  "description": "Named routing for javascript applications",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "test": "./test.sh test",
+    "lint": "eslint {src,test}/**/*{js,jsx}",
+    "test-dist": "",
+    "prepublishOnly": "npm test && npm run-script build && npm run-script test-dist",
+    "build": "rollup -c && ./test.sh test/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexeyds/browser-routes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexeyds/browser-routes/issues"
+  },
+  "homepage": "https://github.com/alexeyds/browser-routes",
+  "keywords": [],
+  "author": "Alexey D",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "enhanced-tape": "^0.1.1",
+    "enhanced-tape-runner": "^1.1.2",
+    "eslint": "^6.8.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "tap-spec-dot": "^0.1.2",
+    "tape": "^4.12.1"
+  }
+}
