@@ -3,10 +3,11 @@ import generateRoute from "generate_route";
 
 test("generateRoute", function(t) {
   t.test("basic usage", function(t) {
-    t.test("returns route info", function(t) {
+    t.test("creates new Route", function(t) {
       let route = generateRoute({name: "users", path: "/users"});
 
       t.equal(route.pathName, "usersPath");
+      t.equal(route.urlName, "usersUrl");
       t.equal(route.rawPath, "/users");
       t.equal(typeof route.toPath, "function");
   
@@ -14,7 +15,7 @@ test("generateRoute", function(t) {
     });
   });
 
-  t.test("route.toPath()", function(t) {
+  t.test("Route#toPath", function(t) {
     t.test("generates simple paths", function(t) {
       let route = generateRoute({name: "users", path: "/users"});
 
@@ -36,6 +37,24 @@ test("generateRoute", function(t) {
       let query = {id: 1, name: "John"};
 
       t.equal(route.toPath({}, {query}), "/users?id=1&name=John");
+    
+      t.end();
+    });
+  });
+
+  t.test("Route#toFullUrl", function(t) {
+    t.test("behaves like toPath if {hostname} option is not provided", function(t) {
+      let route = generateRoute({name: "user", path: "/users/:id"});
+
+      t.equal(route.toFullUrl({id: 1}, {query: {name: "John"}}), "/users/1?name=John");
+  
+      t.end();
+    });
+
+    t.test("prepends {hostname} to path", function(t) {
+      let route = generateRoute({name: "users", path: "/users", hostname: "localhost:3000"});
+
+      t.equal(route.toFullUrl(), "localhost:3000/users");
     
       t.end();
     });
