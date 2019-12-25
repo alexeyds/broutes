@@ -36,5 +36,9 @@
     "rollup-plugin-babel": "^4.3.3",
     "tap-spec-dot": "^0.1.2",
     "tape": "^4.12.1"
+  },
+  "dependencies": {
+    "path-to-regexp": "^1.7.0",
+    "query-string": "^6.9.0"
   }
 }
