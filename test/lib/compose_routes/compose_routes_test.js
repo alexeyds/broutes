@@ -21,6 +21,17 @@ test("composeRoutes", function(t) {
     
       t.end();
     });
+
+    t.test("throws if routes with duplicate names would be added", function(t) {
+      t.throws(() => {
+        composeRoutes(r => {
+          r.path("user", "/users/:id");
+          r.path("user", "/user");
+        });
+      }, /unique/);
+
+      t.end();
+    });
   });
 
   t.test("r.scope()", function(t) {
@@ -62,7 +73,7 @@ test("composeRoutes", function(t) {
       t.end();
     });
 
-    t.test("scope's {defaultParams} are merged into path's", function(t) {
+    t.test("scope's {defaultParams} are merged into path's defaultParams", function(t) {
       let routes = composeRoutes(r => {
         r.scope("/:locale", (r) => {
           r.path("user", "/users/:id", {defaultParams: {id: 1}});
