@@ -13,6 +13,14 @@ test("composeRoutes", function(t) {
 
       t.end();
     });
+
+    t.test("accepts {defaultParams} option", function(t) {
+      let routes = composeRoutes(r => r.path("user", "/users/:id", {defaultParams: {id: 1}}));
+
+      t.equal(routes.userPath(), "/users/1");
+    
+      t.end();
+    });
   });
 
   t.test("r.scope()", function(t) {
@@ -38,6 +46,44 @@ test("composeRoutes", function(t) {
       });
 
       t.equal(routes.usersPath(), "/api/v1/users");
+    
+      t.end();
+    });
+
+    t.test("applies {defaultParams} to every route in the scope", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/:locale", (r) => {
+          r.path("users", "/users");
+        }, {defaultParams: {locale: "en"}});
+      });
+
+      t.equal(routes.usersPath(), "/en/users");
+    
+      t.end();
+    });
+
+    t.test("scope's {defaultParams} are merged into path's", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/:locale", (r) => {
+          r.path("user", "/users/:id", {defaultParams: {id: 1}});
+        }, {defaultParams: {locale: "en"}});
+      });
+
+      t.equal(routes.userPath(), "/en/users/1");
+    
+      t.end();
+    });
+
+    t.test("multiple scopes' {defaultParams} can be combined", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/:locale", (r) => {
+          r.scope("/:role", r => {
+            r.path("users", "/users");
+          }, {defaultParams: {role: "client"}});
+        }, {defaultParams: {locale: "en"}});
+      });
+
+      t.equal(routes.usersPath(), "/en/client/users");
     
       t.end();
     });
