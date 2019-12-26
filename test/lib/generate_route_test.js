@@ -40,6 +40,13 @@ test("generateRoute", function(t) {
     
       t.end();
     });
+
+    t.test("is bound to route", function(t) {
+      let {toPath} = generateRoute({name: "users", path: "/users"});
+      t.doesNotThrow(toPath);
+    
+      t.end();
+    });
   });
 
   t.test("Route#toFullUrl", function(t) {
@@ -58,9 +65,16 @@ test("generateRoute", function(t) {
     
       t.end();
     });
+
+    t.test("is bound to route", function(t) {
+      let {toFullUrl} = generateRoute({name: "users", path: "/users"});
+      t.doesNotThrow(toFullUrl);
+    
+      t.end();
+    });
   });
 
-  t.test("{scopes} options", function(t) {
+  t.test("{scopes} option", function(t) {
     t.test("appends each scope to rawPath", function(t) {
       let route = generateRoute({name: "users", path: "/users", scopes: ["/api", "v2"]});
 
@@ -83,6 +97,45 @@ test("generateRoute", function(t) {
 
       t.same(scopes, ["/api"]);
     
+      t.end();
+    });
+  });
+
+  t.test("{defaultParams} option", function(t) {
+    t.test("adds params to route", function(t) {
+      let defaultParams = {id: 1};
+      let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
+
+      t.equal(route.toPath(), "/users/1");
+    
+      t.end();
+    });
+
+    t.test("default params can be overwritten", function(t) {
+      let defaultParams =  {role: "admin"};
+      let route = generateRoute({name: "user", path: "/users/:role/:id", defaultParams});
+
+      t.equal(route.toPath({id: 1, role: "client"}), "/users/client/1");
+    
+      t.end();
+    });
+
+    t.test("can be function", function(t) {
+      let defaultParams = () => ({id: 1});
+      let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
+
+      t.equal(route.toPath(), "/users/1");
+    
+      t.end();
+    });
+  });
+
+  t.test("{name} array option", function(t) {
+    t.test("joins array to produce route name", function(t) {
+      let route = generateRoute({name: ["api", "users"], path: "/api/users"});
+
+      t.equal(route.pathName, "apiUsersPath");
+  
       t.end();
     });
   });
