@@ -9,7 +9,6 @@ test("composeRoutes", function(t) {
       t.equal(routes.userPath({id: 1}), "/users/1");
       t.equal(routes.userPath.raw, "/users/:id");
       t.equal(routes.userUrl({id: 1}), "/users/1");
-      t.equal(routes.userUrl.raw, "/users/:id");
 
       t.end();
     });
@@ -121,6 +120,28 @@ test("composeRoutes", function(t) {
       });
 
       t.equal(routes.apiV2UsersPath(), "/api/v2/users");
+    
+      t.end();
+    });
+  });
+
+  t.test("{host} option", function(t) {
+    t.test("is appended to url", function(t) {
+      let routes = composeRoutes(r => r.path("user", "/users/:id"), {host: "localhost:3000"});
+
+      t.equal(routes.userUrl({id: 1}), "localhost:3000/users/1");
+    
+      t.end();
+    });
+
+    t.test("is respected in r.scope()", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/api", (r) => {
+          r.path("users", "/users");
+        });
+      }, {host: "localhost:3000"});
+
+      t.equal(routes.usersUrl(), "localhost:3000/api/users");
     
       t.end();
     });
