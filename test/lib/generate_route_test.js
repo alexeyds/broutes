@@ -50,7 +50,7 @@ test("generateRoute", function(t) {
   });
 
   t.test("Route#toFullUrl", function(t) {
-    t.test("behaves like toPath if {hostname} option is not provided", function(t) {
+    t.test("behaves like toPath if {host} option is not provided", function(t) {
       let route = generateRoute({name: "user", path: "/users/:id"});
 
       t.equal(route.toFullUrl({id: 1}, {query: {name: "John"}}), "/users/1?name=John");
@@ -58,8 +58,8 @@ test("generateRoute", function(t) {
       t.end();
     });
 
-    t.test("prepends {hostname} to path", function(t) {
-      let route = generateRoute({name: "users", path: "/users", hostname: "localhost:3000"});
+    t.test("prepends {host} to path", function(t) {
+      let route = generateRoute({name: "users", path: "/users", host: "localhost:3000"});
 
       t.equal(route.toFullUrl(), "localhost:3000/users");
     
