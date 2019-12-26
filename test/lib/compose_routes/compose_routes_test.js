@@ -98,5 +98,31 @@ test("composeRoutes", function(t) {
     
       t.end();
     });
+
+    t.test("appends scope's {name} to each path helper", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/api", (r) => {
+          r.path("users", "/users");
+        }, {name: "api"});
+      });
+
+      t.equal(routes.apiUsersPath(), "/api/users");
+    
+      t.end();
+    });
+
+    t.test("combines multiple scopes' {name}", function(t) {
+      let routes = composeRoutes(r => {
+        r.scope("/api", (r) => {
+          r.scope("/v2", r => {
+            r.path("users", "/users");
+          }, {name: "v2"});
+        }, {name: "api"});
+      });
+
+      t.equal(routes.apiV2UsersPath(), "/api/v2/users");
+    
+      t.end();
+    });
   });
 });
