@@ -1,5 +1,5 @@
-# browser-routes
-Named routing for javascript applications
+# broutes
+Named routing for frontend javascript applications
 
 ## License
 MIT

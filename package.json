@@ -1,5 +1,5 @@
 {
-  "name": "browser-routes",
+  "name": "broutes",
   "version": "0.1.0",
   "description": "Named routing for javascript applications",
   "main": "dist/index.js",
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexeyds/browser-routes.git"
+    "url": "https://github.com/alexeyds/broutes.git"
   },
   "bugs": {
-    "url": "https://github.com/alexeyds/browser-routes/issues"
+    "url": "https://github.com/alexeyds/broutes/issues"
   },
-  "homepage": "https://github.com/alexeyds/browser-routes",
+  "homepage": "https://github.com/alexeyds/broutes",
   "keywords": [],
   "author": "Alexey D",
   "license": "MIT",
