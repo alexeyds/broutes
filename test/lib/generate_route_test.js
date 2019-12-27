@@ -120,9 +120,20 @@ test("generateRoute", function(t) {
       t.end();
     });
 
-    t.test("can be function", function(t) {
-      let defaultParams = () => ({id: 1});
+    t.test("each default param can also be a function", function(t) {
+      let defaultParams = {id: () => 1};
       let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
+
+      t.equal(route.toPath(), "/users/1");
+    
+      t.end();
+    });
+
+    t.test("functional params are resolved when toPath() is called", function(t) {
+      let id;
+      let defaultParams = {id: () => id};
+      let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
+      id = 1;
 
       t.equal(route.toPath(), "/users/1");
     
