@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
 import pkg from './package.json';
 
 export default [
@@ -9,6 +10,6 @@ export default [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
     ],
-    plugins: [babel()]
+    plugins: [babel(), resolve()]
   }
 ];
