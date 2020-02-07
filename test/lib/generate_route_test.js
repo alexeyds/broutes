@@ -32,6 +32,14 @@ test("generateRoute", function(t) {
       t.end();
     });
 
+    t.test("allows function params", function(t) {
+      let route = generateRoute({name: "user", path: "/users/:id"});
+
+      t.equal(route.toPath({id: () => 1}), "/users/1");
+    
+      t.end();
+    });
+
     t.test("appends {query} to path", function(t) {
       let route = generateRoute({name: "users", path: "/users"});
       let query = {id: 1, name: "John"};
@@ -116,26 +124,6 @@ test("generateRoute", function(t) {
       let route = generateRoute({name: "user", path: "/users/:role/:id", defaultParams});
 
       t.equal(route.toPath({id: 1, role: "client"}), "/users/client/1");
-    
-      t.end();
-    });
-
-    t.test("each default param can also be a function", function(t) {
-      let defaultParams = {id: () => 1};
-      let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
-
-      t.equal(route.toPath(), "/users/1");
-    
-      t.end();
-    });
-
-    t.test("functional params are resolved when toPath() is called", function(t) {
-      let id;
-      let defaultParams = {id: () => id};
-      let route = generateRoute({name: "user", path: "/users/:id", defaultParams});
-      id = 1;
-
-      t.equal(route.toPath(), "/users/1");
     
       t.end();
     });
