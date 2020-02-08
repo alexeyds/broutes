@@ -1,4 +1,4 @@
-import test from "tape";
+import test from "enhanced-tape";
 import { capitalize } from "core_extensions/string";
 import { joinBy, ensureIsArray } from "core_extensions/array";
 
