@@ -19,7 +19,7 @@ test("PathCompiler", function(t) {
       t.end();
     });
 
-    t.test("inserts defaultParams into path", function(t) {
+    t.test("inserts {defaultParams} into path", function(t) {
       let defaultParams = {scope: "users"};
       let compiler = new PathCompiler("/:scope", {defaultParams});
 
@@ -28,7 +28,7 @@ test("PathCompiler", function(t) {
       t.end();
     });
 
-    t.test("merges defaultParams into params", function(t) {
+    t.test("merges {defaultParams} into params", function(t) {
       let defaultParams = {scope: "users", slug: "jim"};
       let compiler = new PathCompiler("/:scope/:slug", {defaultParams});
 
