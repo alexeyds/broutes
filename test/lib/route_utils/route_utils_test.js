@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { maybeAppendQuery, joinPaths } from "route_utils";
+import { maybeAppendQuery, joinPaths, pathToName } from "route_utils";
 
 test("route_utils", function(t) {
   t.test("maybeAppendQuery", function(t) {
@@ -60,5 +60,14 @@ test("route_utils", function(t) {
     
       t.end();
     });
+  });
+
+  t.test("pathToName", function(t) {
+    t.equal(pathToName("/users"), "users", "converts simple paths to name");
+    t.equal(pathToName("/users/edit"), "users", "converts complex paths to name");
+    t.equal(pathToName("users"), "users", "converts paths without slashes");
+    t.equal(pathToName("/"), null, "returns null if path is unconvertable");
+
+    t.end();
   });
 });
