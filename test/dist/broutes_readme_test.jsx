@@ -4,10 +4,10 @@ import { composeRoutes } from "../../dist";
 test("composeRoutes", function(t) {
   t.test("basic usage", function(t) {
     let routes = composeRoutes(r => {
-      r.path("login", "/login");
+      r.route("/login");
       r.resources("/users");
       r.scope("/:locale?", r => {
-        r.path("account", "/account");
+        r.route("/account");
       }, {defaultParams: {locale: () => "en"}});
     }, {host: "localhost:3000"});
   
