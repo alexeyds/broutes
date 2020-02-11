@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { maybeAppendQuery, joinPaths, pathToName } from "route_utils";
+import { maybeAppendQuery, joinPaths, pathToName, joinNames } from "route_utils";
 
 test("route_utils", function(t) {
   t.test("maybeAppendQuery", function(t) {
@@ -68,6 +68,12 @@ test("route_utils", function(t) {
     t.equal(pathToName("users"), "users", "converts paths without slashes");
     t.equal(pathToName("/"), null, "returns null if path is unconvertable");
 
+    t.end();
+  });
+
+  t.test("joinNames", function(t) {
+    t.equal(joinNames(['api', 'users']), "apiUsers", "joins and capitalizes names");
+  
     t.end();
   });
 });
