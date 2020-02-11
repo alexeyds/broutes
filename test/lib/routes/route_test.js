@@ -73,10 +73,10 @@ test("buildRoute", function(t) {
       t.end();
     });
 
-    t.test("has .rawPath attribute", function(t) {
+    t.test("has .raw attribute", function(t) {
       let route = buildRoute("/:scope");
 
-      t.equal(route.toPath.rawPath, "/:scope");
+      t.equal(route.toPath.raw, "/:scope");
     
       t.end();
     });
