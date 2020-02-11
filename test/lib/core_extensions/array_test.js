@@ -10,11 +10,4 @@ test("core extensions: array", function(t) {
 
     t.end();
   });
-
-  t.test("ensureIsArray", function(t) {
-    t.same(ensureIsArray([1]), [1], "returns arrays unmodified");
-    t.same(ensureIsArray(1), [1], "wraps any other values into array");
-
-    t.end();
-  });
 });

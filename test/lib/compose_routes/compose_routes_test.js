@@ -21,14 +21,6 @@ test("composeRoutes:", function(t) {
       t.end();
     });
 
-    t.test("supports path name in form of array", function(t) {
-      let routes = composeRoutes(r => r.path(["api", "users"], "/users"));
-
-      t.equal(routes.apiUsersPath(), "/users");
-
-      t.end();
-    });
-
     t.test("throws if routes with duplicate names would be added", function(t) {
       t.throws(() => {
         composeRoutes(r => {

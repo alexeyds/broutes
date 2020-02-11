@@ -5,7 +5,7 @@ test("composeRoutes", function(t) {
   t.test("basic usage", function(t) {
     let routes = composeRoutes(r => {
       r.path("login", "/login");
-      r.resources("users");
+      r.resources("/users");
       r.scope("/:locale?", r => {
         r.path("account", "/account");
       }, {defaultParams: {locale: () => "en"}});
