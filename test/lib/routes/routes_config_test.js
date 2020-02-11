@@ -49,14 +49,8 @@ test("routes config", function(t) {
       t.end();
     });
 
-    t.test("camelizes path name by default", function(t) {
+    t.test("camelizes path name", function(t) {
       t.equal(config().guessRouteName("/user_things"), "userThings");
-    
-      t.end();
-    });
-
-    t.test("doesn't camelize name if {camelizeDefaultPathNames} is false", function(t) {
-      t.equal(config({camelizeDefaultPathNames: false}).guessRouteName("/user_things"), "user_things");
     
       t.end();
     });
