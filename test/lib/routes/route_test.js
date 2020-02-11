@@ -1,10 +1,20 @@
 import test from "enhanced-tape";
-import { buildRoutesConfig } from "routes/routes_config";
+import { buildRoutesConfig, addScope } from "routes/routes_config";
 import { buildScope } from "routes/scope";
 import { buildRoute as doBuildRoute } from "routes/route";
 
 function buildRoute(path, pathConfig={}, routesConfig=buildRoutesConfig()) {
   return doBuildRoute(path, pathConfig, routesConfig);
+}
+
+function routesConfigWithScopes(scopes) {
+  let config = buildRoutesConfig();
+
+  scopes.forEach(scope => {
+    config = addScope(config, scope);
+  });
+
+  return config;
 }
 
 test("buildRoute", function(t) {
@@ -35,7 +45,7 @@ test("buildRoute", function(t) {
 
     t.test("prepends routeConfig's {scopes} to the path", function(t) {
       let scopes = [buildScope("/api"), buildScope("/v1")];
-      let route = buildRoute("/users", {}, buildRoutesConfig({ scopes }));
+      let route = buildRoute("/users", {}, routesConfigWithScopes(scopes));
 
       t.equal(route.toPath(), "/api/v1/users");
     
@@ -47,7 +57,7 @@ test("buildRoute", function(t) {
         buildScope("/:scope", {defaultParams: {scope: "api"}}), 
         buildScope("/:version", {defaultParams: {version: "v1"}})
       ];
-      let route = buildRoute("/users", {}, buildRoutesConfig({ scopes }));
+      let route = buildRoute("/users", {}, routesConfigWithScopes(scopes));
 
       t.equal(route.toPath(), "/api/v1/users");
     
@@ -117,7 +127,7 @@ test("buildRoute", function(t) {
 
     t.test("prepends {scopes}' names to path name", function(t) {
       let scopes = [buildScope("/api", {name: "api"})];
-      let route = buildRoute("/users", {}, buildRoutesConfig({ scopes }));
+      let route = buildRoute("/users", {}, routesConfigWithScopes(scopes));
 
       t.equal(route.name, "apiUsers");
     
@@ -126,7 +136,7 @@ test("buildRoute", function(t) {
 
     t.test("ignores {scopes} with empty names", function(t) {
       let scopes = [buildScope("/api", {name: "api"}), buildScope("/v1")];
-      let route = buildRoute("/users", {}, buildRoutesConfig({ scopes }));
+      let route = buildRoute("/users", {}, routesConfigWithScopes(scopes));
 
       t.equal(route.name, "apiUsers");
     
