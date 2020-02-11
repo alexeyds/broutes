@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { map } from "core_extensions/object";
+import { map, hasKey } from "core_extensions/object";
 
 test("core extension: object", function(t) {
   t.test("map", function(t) {
@@ -22,5 +22,10 @@ test("core extension: object", function(t) {
     });
   });
 
-  t.end();
+  t.test("hasKey", function(t) {
+    t.true(hasKey({a: 1}, "a"), "true if object has matching key");
+    t.false(hasKey({a: 1}, "b"), "false if object has no matching key");
+
+    t.end();
+  });
 });
