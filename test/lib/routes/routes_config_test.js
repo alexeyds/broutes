@@ -36,27 +36,27 @@ test("routes config", function(t) {
     });
   });
 
-  t.test("#guessPathName", function(t) {
+  t.test("#guessRouteName", function(t) {
     t.test("converts path to name", function(t) {
-      t.equal(config().guessPathName("/users"), "users");
+      t.equal(config().guessRouteName("/users"), "users");
   
       t.end();
     });
 
     t.test("returns null if name can't be guessed", function(t) {
-      t.equal(config().guessPathName("/"), null);
+      t.equal(config().guessRouteName("/"), null);
     
       t.end();
     });
 
     t.test("camelizes path name by default", function(t) {
-      t.equal(config().guessPathName("/user_things"), "userThings");
+      t.equal(config().guessRouteName("/user_things"), "userThings");
     
       t.end();
     });
 
     t.test("doesn't camelize name if {camelizeDefaultPathNames} is false", function(t) {
-      t.equal(config({camelizeDefaultPathNames: false}).guessPathName("/user_things"), "user_things");
+      t.equal(config({camelizeDefaultPathNames: false}).guessRouteName("/user_things"), "user_things");
     
       t.end();
     });
