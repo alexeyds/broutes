@@ -1,6 +1,6 @@
 {
   "name": "broutes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Named routing for javascript applications",
   "main": "dist/index.js",
   "files": [
@@ -40,7 +40,7 @@
     "tape": "^4.13.0"
   },
   "dependencies": {
-    "path-to-regexp": "6.1.0",
+    "path-to-regexp": "1.7.0",
     "query-string": "^6.10.1"
   }
 }
