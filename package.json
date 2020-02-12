@@ -26,21 +26,21 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
-    "@rollup/plugin-node-resolve": "^6.0.0",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "enhanced-tape": "^0.1.1",
     "enhanced-tape-runner": "^1.1.2",
     "eslint": "^6.8.0",
     "pluralize": "^8.0.0",
-    "rollup": "^1.27.14",
+    "rollup": "^1.31.0",
     "rollup-plugin-babel": "^4.3.3",
     "tap-spec-dot": "^0.1.2",
-    "tape": "^4.12.1"
+    "tape": "^4.13.0"
   },
   "dependencies": {
-    "path-to-regexp": "1.7.0",
-    "query-string": "^6.9.0"
+    "path-to-regexp": "6.1.0",
+    "query-string": "^6.10.1"
   }
 }
