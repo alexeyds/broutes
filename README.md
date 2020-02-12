@@ -22,6 +22,7 @@ let routes = composeRoutes(r => {
 }, {host: "test.com"});
 
 routes.myOrdersPath(); //=> "/en/my-orders"
+routes.myOrdersPath({}, {query: {foo: "bar"}}); //=> "/en/my-orders?foo=bar"
 routes.myOrdersPath({locale: "ru"}); //=> "/ru/my-orders"
 routes.myOrdersUrl(); //=> "test.com/en/my-orders"
 
@@ -58,6 +59,7 @@ let routes = composeRoutes(r => {
 });
 
 routes.knivesPath(); //=> "/knives"
+routes.knivesPath({}, {query: {sharpOnly: true}}); //=> "/knives?sharpOnly=true"
 routes.knivesUrl(); //=> "test.com/knives"
 routes.knifePath({id: 1}); //=> "/knives/1"
 routes.editKnifePath({id: 1}); //=> "/knives/1/edit"

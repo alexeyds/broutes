@@ -17,6 +17,7 @@ test("broutes readme test", function(t) {
       }, {host: "test.com"});
 
       t.equal(routes.myOrdersPath(), "/en/my-orders");
+      t.equal(routes.myOrdersPath({}, {query: {foo: "bar"}}), "/en/my-orders?foo=bar");
       t.equal(routes.myOrdersPath({locale: "ru"}), "/ru/my-orders");
       t.equal(routes.myOrdersUrl(), "test.com/en/my-orders");
 
@@ -40,6 +41,7 @@ test("broutes readme test", function(t) {
       });
 
       t.equal(routes.knivesPath(), "/knives");
+      t.equal(routes.knivesPath({}, {query: {sharpOnly: true}}), "/knives?sharpOnly=true");
       t.equal(routes.knivesUrl(), "test.com/knives");
       t.equal(routes.knifePath({id: 1}), "/knives/1");
       t.equal(routes.editKnifePath({id: 1}), "/knives/1/edit");
@@ -82,7 +84,7 @@ test("broutes readme test", function(t) {
 
       t.equal(routes.usersPath(), "/en/users");
       t.equal(routes.usersPath({locale: "ru"}), "/ru/users");
-      
+
       t.equal(routes.apiUserPath({id: 1}), "/en/api/users/1");
       t.equal(routes.apiUserPath({locale: "ru", id: 2}), "/ru/api/users/2");
   
