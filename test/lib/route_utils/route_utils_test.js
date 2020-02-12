@@ -66,6 +66,8 @@ test("route_utils", function(t) {
     t.equal(pathToName("/users"), "users", "converts simple paths to name");
     t.equal(pathToName("/users/edit"), "users", "converts complex paths to name");
     t.equal(pathToName("users"), "users", "converts paths without slashes");
+    t.equal(pathToName("/my_orders"), "my_orders", "converts paths with underscores");
+    t.equal(pathToName("/my-orders"), "my-orders", "converts paths with dashes");
     t.equal(pathToName("/"), null, "returns null if path is unconvertable");
 
     t.end();
