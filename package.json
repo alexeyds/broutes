@@ -8,9 +8,9 @@
     "lib"
   ],
   "scripts": {
-    "test": "./test.sh test",
+    "test": "./test.sh test/lib",
     "lint": "eslint {src,test}/**/*{js,jsx}",
-    "test-dist": "",
+    "test-dist": "./test.sh test/dist",
     "prepublishOnly": "npm test && npm run-script build && npm run-script test-dist",
     "build": "rollup -c && ./test.sh test/dist"
   },
