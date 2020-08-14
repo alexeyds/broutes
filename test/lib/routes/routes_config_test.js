@@ -63,6 +63,12 @@ test("routes config", function(t) {
     
       t.end();
     });
+
+    t.test(".guessRouteName() lowercases first letter", function(t) {
+      t.equal(config().guessRouteName("/UserThings"), "userThings");
+    
+      t.end();
+    });
   });
 
   t.test("addScope()", function(t) {
