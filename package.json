@@ -28,14 +28,16 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@babel/register": "^7.12.10",
+    "@rollup/plugin-babel": "^5.2.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "enhanced-tape": "^0.2.2",
     "enhanced-tape-runner": "^1.1.4",
     "eslint": "^7.18.0",
+    "jutest": "^0.0.2",
     "pluralize": "^8.0.0",
     "rollup": "^2.38.0",
-    "rollup-plugin-babel": "^4.4.0",
     "tap-spec-dot": "^0.1.4",
     "tape": "^5.1.1"
   },
