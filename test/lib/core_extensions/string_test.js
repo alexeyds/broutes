@@ -1,26 +1,30 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { capitalize, camelize, simpleSingularize } from "core_extensions/string";
 
-test("core extenstions: String", function(t) {
-  t.test("capitalize()", function(t) {
-    t.test("capitalizes string", function(t) {
+jutest("core extenstions: String", s => {
+  s.describe("capitalize()", s => {
+    s.test("capitalizes string", t => {
       t.equal(capitalize("foo"), "Foo");
-
-      t.end();
     });
   });
 
-  t.test("camelize()", function(t) {
-    t.equal(camelize("fooBar"), "fooBar", "returns camelized strings unchanged");
-    t.equal(camelize("foo_bar_test"), "fooBarTest", "camelizes underscore_notation");
-    t.equal(camelize("foo-bar-test"), "fooBarTest", "camelizes dashed-notation");
+  s.describe("camelize()", s => {
+    s.test("returns camelized strings unchanged", t => {
+      t.equal(camelize("fooBar"), "fooBar");
+    });
 
-    t.end();
+    s.test("camelizes underscore_notation", t => {
+      t.equal(camelize("foo_bar_test"), "fooBarTest");
+    });
+
+    s.test("camelizes dashed-notation", t => {
+      t.equal(camelize("foo-bar-test"), "fooBarTest");
+    });
   });
 
-  t.test("simpleSingularize()", function(t) {
-    t.equal(simpleSingularize("users"), "user", "removes last letter from the word");
-  
-    t.end();
+  s.describe("simpleSingularize()", s => {
+    s.test("removes last letter from the word", t => {
+      t.equal(simpleSingularize("users"), "user");
+    });
   });
 });

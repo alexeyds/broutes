@@ -1,10 +1,10 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import pluralize from "pluralize";
 import { composeRoutes } from "../../dist";
 
-test("broutes readme test", function(t) {
-  t.test("Intro", function(t) {
-    t.test("Example usage", function(t) {
+jutest("broutes readme test", s => {
+  s.describe("Intro", s => {
+    s.test("Example usage", t => {
       let routes = composeRoutes(r => {
         r.scope("/:locale?", r => {
           r.route("/my-orders");
@@ -26,13 +26,11 @@ test("broutes readme test", function(t) {
       t.equal(routes.apiCreditCardsPath(), "/en/api/credit_cards");
       t.equal(routes.apiCreditCardPath({id: 1}), "/en/api/credit_cards/1");
       t.equal(routes.apiCreditCardPath.raw, "/:locale?/api/credit_cards/:id");
-  
-      t.end();
     });
   });
 
-  t.test("composeRoutes()", function(t) {
-    t.test("Example", function(t) {
+  s.describe("composeRoutes()", s => {
+    s.test("Example", t => {
       let routes = composeRoutes(r => {
         r.resources("/knives");
       }, {
@@ -45,13 +43,11 @@ test("broutes readme test", function(t) {
       t.equal(routes.knivesUrl(), "test.com/knives");
       t.equal(routes.knifePath({id: 1}), "/knives/1");
       t.equal(routes.editKnifePath({id: 1}), "/knives/1/edit");
-  
-      t.end();
     });
   });
 
-  t.test("r.route()", function(t) {
-    t.test("Example", function(t) {
+  s.describe("r.route()", s => {
+    s.test("Example", t => {
       let routes = composeRoutes(r => {
         r.route("/my-orders");
         r.route("/users", {name: "clients"});
@@ -65,13 +61,11 @@ test("broutes readme test", function(t) {
       t.equal(routes.clientPath(), "/users/john");
       t.equal(routes.clientPath({slug: "joe"}), "/users/joe");
       t.equal(routes.clientPath.raw, "/users/:slug");
-  
-      t.end();
     });
   });
 
-  t.test("r.scope()", function(t) {
-    t.test("Example", function(t) {
+  s.describe("r.scope()", s => {
+    s.test("Example", t => {
       let routes = composeRoutes(r => {
         r.scope("/:locale?", r => {
           r.route("/users");
@@ -87,13 +81,11 @@ test("broutes readme test", function(t) {
 
       t.equal(routes.apiUserPath({id: 1}), "/en/api/users/1");
       t.equal(routes.apiUserPath({locale: "ru", id: 2}), "/ru/api/users/2");
-  
-      t.end();
     });
   });
 
-  t.test("r.resources()", function(t) {
-    t.test("Example", function(t) {
+  s.describe("r.resources()", s => {
+    s.test("Example", t => {
       let routes = composeRoutes(r => {
         r.resources("/users", {only: ["index", "show"], name: "clients"});
         r.resources("/people", {singularName: "person", param: "slug"});
@@ -108,8 +100,6 @@ test("broutes readme test", function(t) {
 
       t.equal(routes.myAccountPath(), "/my_account");
       t.equal(routes.editMyAccountPath(), "/my_account/edit");
-  
-      t.end();
     });
   });
 });
