@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { pathToName, joinPaths, normalizeLeadingSlash } from "utils/path";
+import { pathToName, joinPaths, normalizeLeadingSlash, removeTrailingSlashes } from "utils/path";
 
 jutest("utils/path", s => {
   s.describe("pathToName()", s => {
@@ -51,6 +51,20 @@ jutest("utils/path", s => {
 
     s.test("preserves non-leading slashes", t => {
       t.equal(normalizeLeadingSlash('test/user'), '/test/user');
+    });
+  });
+
+  s.describe("removeTrailingSlashes()", s => {
+    s.test("does nothing if path has no trailing slashes", t => {
+      t.equal(removeTrailingSlashes('/test'), '/test');
+    });
+
+    s.test("removes trailing slashes", t => {
+      t.equal(removeTrailingSlashes('/test/'), '/test');
+    });
+
+    s.test("preserves at least one slash in / routes", t => {
+      t.equal(removeTrailingSlashes('///'), '/');
     });
   });
 });

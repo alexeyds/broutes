@@ -110,4 +110,26 @@ jutest("composeRoutes()", s => {
       }, /existing route/);
     });
   });
+
+  s.describe("r.resources()", s => {
+    let resources = (...args) => composeRoutes(r => r.resources(...args));
+
+    s.test("defines CRUD resource routes", t => {
+      let routes = resources('/users');
+
+      t.equal(routes.users.indexPath(), '/users');
+      t.equal(routes.users.showPath({id: 123}), '/users/123');
+      t.equal(routes.users.newPath(), '/users/new');
+    });
+
+    s.test("allows adding custom routes to resource", t => {
+      let routes = resources('/users', r => r.route('/test'));
+      t.equal(routes.users.testPath(), '/users/test');
+    });
+
+    s.test("supports options", t => {
+      let routes = resources('/users', () => {}, { name: 'people' });
+      t.equal(routes.people.indexPath(), '/users');
+    });
+  });
 });

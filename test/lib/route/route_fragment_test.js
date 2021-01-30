@@ -56,6 +56,11 @@ jutest("route/route_fragment", s => {
       t.equal(route(), '/users/foo');
     });
 
+    s.test("removes leading slashes", t => {
+      let route = compileFragments([routeFragment('/users'), routeFragment('/')]);
+      t.equal(route(), '/users');
+    });
+
     s.test("combines defaultParams of multiple fragments", t => {
       let fragment1 = routeFragment('/users/:id', { defaultParams: { id: 123} });
       let fragment2 = routeFragment('/:action', { defaultParams: { action: 'edit' } });
