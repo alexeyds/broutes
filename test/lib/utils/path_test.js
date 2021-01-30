@@ -16,10 +16,6 @@ jutest("utils/path", s => {
       t.equal(pathToName('/users/new/'), 'new');
     });
 
-    s.test("returns 'root' for / path", t => {
-      t.equal(pathToName('/'), 'root');
-    });
-
     s.test("returns null if name cannot be guessed", t => {
       t.equal(pathToName('///'), null);
       t.equal(pathToName('/---'), null);
