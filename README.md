@@ -8,6 +8,8 @@ npm:
 npm i broutes
 ```
 
+yarn:
+
 ```cmd
 yarn add broutes
 ```
@@ -52,7 +54,7 @@ Builds and returns new `routes` object containing named path builders for define
 
 * **routesBuilder**: a builder function to which an object containing {[route](#rroute), [scope](#rscope), [namedScope](#rnamedscope), [resources](#rresources)} will be passed.
 * **options**:
-  * **toQueryString**: a function used to build query string for all routes. A simple non-strict `encodeURIComponent`-based function is used by default.
+  * **toQueryString**: a function used to build query strings for all routes. A simple non-strict `encodeURIComponent`-based function is used by default.
 
 ### r.route()
 ```js
@@ -87,7 +89,7 @@ routes.clientPath.raw; //=> "/users/:slug"
 ```js
 r.scope(path, scopeBuilder[, options])
 ```
-Defines new *unnamed* scope for routes. Scopes can also be nested within each other.
+Defines new scope for all contained routes. Scopes can also be nested within each other.
 
 * **path**: scope's path. This path will be added to each route within the scope.
 * **scopeBuilder**: builder function which has the same API as the [composeRoutes'](#composeRoutes) builder function.
