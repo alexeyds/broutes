@@ -132,4 +132,22 @@ jutest("composeRoutes()", s => {
       t.equal(routes.people.indexPath(), '/users');
     });
   });
+
+  s.describe("r.customRoute()", s => {
+    let customRoute = (...args) => composeRoutes(r => r.customRoute(...args));
+
+    s.test("defines custom route", t => {
+      let routes = customRoute('test', () => '/foo');
+      t.equal(routes.testPath(), '/foo');      
+    });
+
+    s.test("validates name availability", t => {
+      t.throws(() => {
+        composeRoutes(r => {
+          r.customRoute('test', () => {});
+          r.customRoute('test', () => {});
+        });
+      }, /existing route/);
+    });
+  });
 });
