@@ -7,6 +7,31 @@ jutest("composeRoutes()", s => {
     t.same(routes, {});
   });
 
+  s.test("has {toQueryString} option", t => {
+    let toQueryString = (query) => `a=${query.a+1}`;
+    let routes = composeRoutes((r) => r.route('/test'), { toQueryString });
+
+    let query = { a: 1 };
+    t.equal(routes.testPath({}, { query }), '/test?a=2');
+  });
+
+  s.test("passes {toQueryString} option to all nested scopes", t => {
+    let toQueryString = (query) => `a=${query.a+1}`;
+    let routes = composeRoutes((r) => {
+      r.scope('/test', r => {
+        r.route('/foo');
+      });
+
+      r.namedScope('/test', r => {
+        r.route('/foo');
+      });
+    }, { toQueryString });
+
+    let query = { a: 1 };
+    t.equal(routes.fooPath({}, { query }), '/test/foo?a=2');
+    t.equal(routes.test.fooPath({}, { query }), '/test/foo?a=2');
+  });
+
   s.describe("r.route()", s => {
     let route = (...args) => composeRoutes(r => r.route(...args));
 
@@ -36,6 +61,13 @@ jutest("composeRoutes()", s => {
     s.test("names / route as root", t => {
       let routes = route('/');
       t.equal(routes.rootPath(), '/');
+    });
+
+    s.test("supports {query} option in resulting route", t => {
+      let routes = route('/test');
+      let query = { foo: 'bar' };
+
+      t.equal(routes.testPath({}, { query }), '/test?foo=bar');
     });
   });
 
