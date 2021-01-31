@@ -2,7 +2,7 @@
   "name": "broutes",
   "version": "1.0.5",
   "description": "Named routing for javascript applications",
-  "main": "dist/index.js",
+  "main": "dist/broutes.js",
   "files": [
     "dist",
     "lib"
@@ -38,7 +38,6 @@
     "rollup": "^2.38.0"
   },
   "dependencies": {
-    "path-to-regexp": "^1.7.0",
-    "query-string": "^6.13.8"
+    "path-to-regexp": "^1.7.0"
   }
 }

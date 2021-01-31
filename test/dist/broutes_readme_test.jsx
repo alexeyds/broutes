@@ -1,6 +1,6 @@
 import jutest from "jutest";
 import pluralize from "pluralize";
-import { composeRoutes } from "../../dist";
+import { composeRoutes } from "../../dist/broutes";
 
 jutest("broutes readme test", s => {
   s.describe("Intro", s => {
