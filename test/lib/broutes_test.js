@@ -13,6 +13,7 @@ jutest("composeRoutes()", s => {
 
     let query = { a: 1 };
     t.equal(routes.testPath({}, { query }), '/test?a=2');
+    t.equal(routes.testPath({}), '/test');
   });
 
   s.test("passes {toQueryString} option to all nested scopes", t => {
@@ -43,6 +44,11 @@ jutest("composeRoutes()", s => {
     s.test("supports options", t => {
       let routes = route('/users/:id', { name: 'user' });
       t.equal(routes.userPath({id: 123}), '/users/123');
+    });
+
+    s.test("exposes .raw attribute on the route", t => {
+      let routes = route('/users/:id', { name: 'user' });
+      t.equal(routes.userPath.raw, '/users/:id');
     });
 
     s.test("validates route uniqueness", t => {

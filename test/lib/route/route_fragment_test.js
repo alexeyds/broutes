@@ -68,5 +68,10 @@ jutest("route/route_fragment", s => {
 
       t.equal(route(), '/users/123/edit');
     });
+
+    s.test("adds .raw option to resulting route", t => {
+      let route = compileFragments([routeFragment('/users'), routeFragment('/:id')]);
+      t.equal(route.raw, '/users/:id');
+    });
   });
 });

@@ -34,7 +34,6 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.18.0",
     "jutest": "^0.0.2",
-    "pluralize": "^8.0.0",
     "rollup": "^2.38.0"
   },
   "dependencies": {
