@@ -1,9 +1,15 @@
 # broutes
-Named routing for frontend javascript applications. Uses [path-to-regexp](https://github.com/pillarjs/path-to-regexp) v1.7.0 internally and is fully compatible with [react-router](https://github.com/ReactTraining/react-router/).
+A simple router DSL for defining named routes in frontend javascript applications. Uses [path-to-regexp](https://github.com/pillarjs/path-to-regexp) v1.7.0 internally and is fully compatible with [react-router](https://github.com/ReactTraining/react-router/).
 
 ## Installation
+npm:
+
 ```cmd
 npm i broutes
+```
+
+```cmd
+yarn add broutes
 ```
 
 ## Example Usage
@@ -11,26 +17,29 @@ npm i broutes
 import { composeRoutes } from "broutes";
 
 let routes = composeRoutes(r => {
-  r.scope("/:locale?", r => {
-    r.route("/my-orders");
-    r.route("/logout", {name: "signout"});
+  r.route('/tests');
+  r.route('/foo/:slug', { name: 'foo', defaultParams: { slug: 'bar' } });
+  r.resources('/orders');
 
-    r.scope("/api", r => {
-      r.resources("/credit_cards", {only: ["index", "show"]});
-    }, {name: "api"});
-  }, {defaultParams: {locale: "en"}});
-}, {host: "test.com"});
+  r.namedScope('/api', r => {
+    r.scope('/:version', r => {
+      r.route('/users');
+    }, { defaultParams: { version: 'v1' }});
+  });
+});
 
-routes.myOrdersPath(); //=> "/en/my-orders"
-routes.myOrdersPath({}, {query: {foo: "bar"}}); //=> "/en/my-orders?foo=bar"
-routes.myOrdersPath({locale: "ru"}); //=> "/ru/my-orders"
-routes.myOrdersUrl(); //=> "test.com/en/my-orders"
+routes.testsPath(); //=> '/tests'
+routes.fooPath(); //=> '/foo/bar'
+routes.fooPath({ slug: 'baz' }); //=> '/foo/baz'
 
-routes.signoutPath(); //=> "/en/logout"
+routes.orders.indexPath(); //=> '/orders'
+routes.orders.showPath({ id: 123 }); //=> '/orders/123'
+routes.orders.newPath(); //=> '/orders/new'
+routes.orders.showPath.raw; //=> '/orders/:id'
 
-routes.apiCreditCardsPath(); //=> "/en/api/credit_cards"
-routes.apiCreditCardPath({id: 1}); //=> "/en/api/credit_cards/1"
-routes.apiCreditCardPath.raw; //=> "/:locale?/api/credit_cards/:id"
+routes.api.usersPath(); //=> '/api/v1/users'
+routes.api.usersPath({ version: 'v2' }); //=> '/api/v2/users'
+routes.api.usersPath({}, { query: { foo: 'bar' } }); //=> '/api/v1/users?foo=bar'
 ```
 
 ## API
@@ -39,37 +48,17 @@ routes.apiCreditCardPath.raw; //=> "/:locale?/api/credit_cards/:id"
 ```js 
 composeRoutes(routesBuilder[, options])
 ```
-Builds and returns new `routes` object containing named \*-path and \*-url helpers for defined routes.
+Builds and returns new `routes` object containing named path builders for defined routes.
 
-* **routesBuilder**: a function which will be passed {[route](#rroute), [scope](#rscope), [resources](#rresources)} object.
+* **routesBuilder**: a builder function to which an object containing {[route](#rroute), [scope](#rscope), [namedScope](#rnamedscope), [resources](#rresources)} will be passed.
 * **options**:
-  * **host**: optional host string to be prepended to each path when calling \*-url named helpers. If not specified, \*-url helpers with behave just like \*-path helpers.
-  * **singularizeResource**: function used to name resource helpers in which singular name is required, e.g `editUserPath({id: 1})`. **By default, it simply removes last letter from resource name**. If such behavior is not desired, you can either specify [`singularName`](#rresources) option when defining your resource or replace this function with something like [pluralize](https://github.com/blakeembrey/pluralize)
-
-#### Example
-```js
-import { composeRoutes } from "broutes";
-import pluralize from "pluralize";
-
-let routes = composeRoutes(r => {
-  r.resources("/knives");
-}, {
-  host: "test.com",
-  singularizeResource: (resource) => pluralize(resource, 1)
-});
-
-routes.knivesPath(); //=> "/knives"
-routes.knivesPath({}, {query: {sharpOnly: true}}); //=> "/knives?sharpOnly=true"
-routes.knivesUrl(); //=> "test.com/knives"
-routes.knifePath({id: 1}); //=> "/knives/1"
-routes.editKnifePath({id: 1}); //=> "/knives/1/edit"
-```
+  * **toQueryString**: a function used to build query string for all routes. A simple non-strict `encodeURIComponent`-based function is used by default.
 
 ### r.route()
 ```js
 r.route(path[, options])
 ```
-Adds new named route to `routes` object, e.g adds `{name}Path` and `{name}Url` named helpers. You can also access route's raw path(with all named placeholders in place) via `{name}Path.raw`.
+Adds new named route to `routes` object, which then can be built by calling `{routeName}Path()` function. You can also access route's raw path(with all named placeholders in place) via `{routeName}Path.raw`.
 
 `r.route()` will throw if route with the same name was already defined.
 
@@ -98,89 +87,44 @@ routes.clientPath.raw; //=> "/users/:slug"
 ```js
 r.scope(path, scopeBuilder[, options])
 ```
-Defines new scope for routes. Scopes can also be nested within each other.
+Defines new *unnamed* scope for routes. Scopes can also be nested within each other.
 
 * **path**: scope's path. This path will be added to each route within the scope.
 * **scopeBuilder**: builder function which has the same API as the [composeRoutes'](#composeRoutes) builder function.
 * **options**:
-  * **name**: defines name for this scope. Each route's name within the scope will also include this scope's name. Empty by default.
-  * **defaultParams**: object containing default [named parameters](https://github.com/pillarjs/path-to-regexp#named-parameters) for paths in this scope. See below for example usage.
+  * **defaultParams**: object containing default [named parameters](https://github.com/pillarjs/path-to-regexp#named-parameters) for paths in this scope.
 
-#### Example
+### r.namedScope()
 ```js
-let routes = composeRoutes(r => {
-  r.scope("/:locale?", r => {
-    r.route("/users");
-
-    r.scope("/api", r => {
-      r.route("/users/:id", {name: "user"});
-    }, {name: "api"});
-  }, {defaultParams: {locale: "en"}});
-});
-
-routes.usersPath(); //=> "/en/users"
-routes.usersPath({locale: "ru"}); //=> "/ru/users"
-
-routes.apiUserPath({id: 1}); //=> "/en/api/users/1"
-routes.apiUserPath({locale: "ru", id: 2}); //=> "/ru/api/users/2"
+r.namedScope(path, scopeBuilder[, options])
 ```
+Defines new named scope for routes, i.e adds a namespace within routes object(or within another named scope).
+
+* **path**: scope's path. This path will be added to each route within the scope.
+* **scopeBuilder**: builder function which has the same API as the [composeRoutes'](#composeRoutes) builder function.
+* **options**:
+  * **name**: explicitly defines name of this named scope. By default, the scope name will be inferred from the path and set to camelCase.
+  * **defaultParams**: object containing default [named parameters](https://github.com/pillarjs/path-to-regexp#named-parameters) for paths in this scope.
 
 ### r.resources()
 ```js
-r.resources(path[, options])
+r.resources(path, scopeBuilder[, options])
 ```
-Defines RESTful routes for a resource. 
-
-* **path**: resources' base path.
-* **options**:
-  * **name**: resources' base name. By default it is inferred from **path** using [route's](#rroute) naming logic.
-  * **singularName**: used to name resource helpers in which singular name is required, e.g `editUserPath({id: 1})`. By default uses [singularizeResource()](#composeRoutes) function. Has no effect on singleton routes.
-  * **param**: the name of the named parameter for this resource, "id" by default. Has no effect on singleton routes.
-  * **only**: a list of actions to define routes for. Defaults to ["index", "show", "edit", "new"] for normal resources and ["show", "edit", "new"] for singleton resources.
-  * **exclude**: a list of actions to exclude generated routes from. 
-  * **singleton**: if true, defines routes for a singleton resource(e.g the one that has no ID).
-
-The definition:
-```js
-r.resources("/users");
-```
-is roughly equivalent to:
-```js
-r.route("/users"); // "index" action
-r.route("/users/:id", {name: "user"}); // "show" action
-r.route("/users/:id/edit", {name: "editUser"}); // "edit" action
-r.route("/users/new", {name: "newUser"}); // "new" action
-```
-
-And the singleton resource definition:
-```js
-r.resources("/user", {singleton: true});
-```
-is roughly equivalent to:
-```js
-r.route("/user"); // "show" action
-r.route("/user/edit", {name: "editUser"}); // "edit" action
-r.route("/user/new", {name: "newUser"}); // "new" action
-```
-
-#### Example
+A simple shortcut to define commonly used routes. A call to `r.resources('/users')` is exactly equalent to:
 
 ```js
-let routes = composeRoutes(r => {
-  r.resources("/users", {only: ["index", "show"], name: "clients"});
-  r.resources("/people", {singularName: "person", param: "slug"});
-  r.resources("/my_account", {singleton: true, except: ["new"]});
+r.namedScope('/users', (r) => {
+  r.route('/', { name: 'index' });
+  r.route('/:id', { name: 'show' });
+  r.route('/new');
 });
-
-routes.clientsPath(); //=> "/users"
-routes.clientPath({id: 1}); //=> "/users/1"
-
-routes.editPersonPath({slug: "john"}); //=> "/people/john/edit"
-routes.newPersonPath(); //=> "/people/new"
-
-routes.myAccountPath(); // => "/my_account"
-routes.editMyAccountPath(); // => "/my_account/edit"
 ```
+
+* **path**: path for the resources
+* **scopeBuilder**: builder function which has the same API as the [composeRoutes'](#composeRoutes) builder function.
+* **options**:
+  * **name**: explicitly defines name of this resource and the [namedScope](#rnamedscope) it's contained in.
+  * **defaultParams**: object containing default [named parameters](https://github.com/pillarjs/path-to-regexp#named-parameters) for paths in this scope.
 
 ## License
 MIT
