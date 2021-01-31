@@ -1,6 +1,6 @@
 {
   "name": "broutes",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Named routing for javascript applications",
   "main": "dist/broutes.js",
   "files": [
