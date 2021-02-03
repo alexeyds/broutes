@@ -33,6 +33,24 @@ jutest("composeRoutes()", s => {
     t.equal(routes.test.fooPath({}, { query }), '/test/foo?a=2');
   });
 
+  s.describe("r.addPath()", s => {
+    let addPath = (...args) => composeRoutes(r => r.addPath(...args));
+
+    s.test("defines custom route", t => {
+      let routes = addPath('test', () => '/foo');
+      t.equal(routes.testPath(), '/foo');      
+    });
+
+    s.test("validates name availability", t => {
+      t.throws(() => {
+        composeRoutes(r => {
+          r.addPath('test', () => {});
+          r.addPath('test', () => {});
+        });
+      }, /existing route/);
+    });
+  });
+
   s.describe("r.route()", s => {
     let route = (...args) => composeRoutes(r => r.route(...args));
 
@@ -168,24 +186,6 @@ jutest("composeRoutes()", s => {
     s.test("supports options", t => {
       let routes = resources('/users', () => {}, { name: 'people' });
       t.equal(routes.people.indexPath(), '/users');
-    });
-  });
-
-  s.describe("r.customRoute()", s => {
-    let customRoute = (...args) => composeRoutes(r => r.customRoute(...args));
-
-    s.test("defines custom route", t => {
-      let routes = customRoute('test', () => '/foo');
-      t.equal(routes.testPath(), '/foo');      
-    });
-
-    s.test("validates name availability", t => {
-      t.throws(() => {
-        composeRoutes(r => {
-          r.customRoute('test', () => {});
-          r.customRoute('test', () => {});
-        });
-      }, /existing route/);
     });
   });
 });
